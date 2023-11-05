@@ -18,6 +18,8 @@ app.use(bodyParser.urlencoded({extended:true}));
 // CONECTA CON ARCHIVO RUTA
 require("./routes.js")
 
+// LINEA PARA VISUALIZAR FRONT END A TRAVÉS DE BACK END
+app.use("/",express.static(__dirname+"/frontend"))
 
 // MENSAJE DE ÉXITO CONEXIÓN SERVIDOR
 app.listen(puerto,function(){

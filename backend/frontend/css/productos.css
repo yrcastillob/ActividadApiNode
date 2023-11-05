@@ -1,0 +1,8 @@
+.formularioProductos {
+    padding: 1rem;
+    border: 1px grey;
+    background-color: rgb(34, 231, 166);
+    border-radius: 4px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
