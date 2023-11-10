@@ -15,11 +15,29 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+
+// CONECTA CON MONGO
+const mongoose = require("mongoose");
+
+
 // CONECTA CON ARCHIVO RUTA
 require("./routes.js")
 
+
+// CONECTAR A LA BASE DE DATOS
+mongoose.connect("mongodb://127.0.0.1:27017/productos",{
+    useNewUrlParser:true,
+    useUnifiedTopology:true
+}).then((res)=>{
+    console.log("Conexión correcta a mongo")
+}).catch((error)=>{
+    console.log(error)
+})
+
+
 // LINEA PARA VISUALIZAR FRONT END A TRAVÉS DE BACK END
 app.use("/",express.static(__dirname+"/frontend"))
+
 
 // MENSAJE DE ÉXITO CONEXIÓN SERVIDOR
 app.listen(puerto,function(){
