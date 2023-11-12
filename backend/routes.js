@@ -71,7 +71,12 @@ app.post("/usuarios/Eliminar", function(request,response){
 
 // LOGIN - ELIMINAR usuarios
 
-
 app.post("/usuarios/Login", function(request,response){
     usuariosController.Login(request,response);    
+})
+
+// ACTIVAR CUENTA - ELIMINAR usuarios
+
+app.get("/usuarios/Activarcuenta/:correo/:codigoact", function(request,response){
+    usuariosController.Activarcuenta(request,response);    
 })

@@ -21,13 +21,13 @@ const myModel = mongoose.model("usuarios",usuariosSchema);
 usuariosModel.Guardar = function(post,callback){
 
     const instancia = new myModel;
-    const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    
 
     instancia.nombre = post.nombre;
     instancia.correo = post.correo;
     instancia.password = post.password;
     instancia.rol = 2 // 1 admin, 2 cliente, 3 etc...
-    instancia.codigoact = abc[Math.floor(Math.random() * 26)]+abc[Math.floor(Math.random() * 26)]+Math.floor(Math.random()*(99999-10000 + 1)+10000)+abc[Math.floor(Math.random() * 26)]+abc[Math.floor(Math.random() * 26)]
+    instancia.codigoact = post.codigoact;
     instancia.estado = 0
 
     instancia.save().then((res)=>{
@@ -103,6 +103,30 @@ usuariosModel.CuentaActiva = function(post,callback){
             return callback({state:false})
         }
     })
+}
+
+
+usuariosModel.BuscarCodigoActivacion = function(post,callback){
+    
+    myModel.find({correo: post.correo, codigoact: post.codigoact},{estado:1}).then((res)=>{
+        if (res.length==0){
+            return callback({state:false});
+        }else{
+            return callback({state:true, estado: res[0].estado});
+        }
+    })
+
+}
+
+usuariosModel.CambiarEstado = function(post,callback){
+    myModel.findOneAndUpdate({correo: post.correo, codigoact:post.codigoact},
+        {
+            estado : 1
+        }).then((res)=>{
+            return callback({state:true});
+        }).catch((error)=>{
+            return callback({state:false});
+        })
 }
 
 module.exports.usuariosModel = usuariosModel
