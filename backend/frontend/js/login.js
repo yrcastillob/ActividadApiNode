@@ -1,0 +1,102 @@
+//Petición al backend
+class herramientas {
+    mensajes = [];
+
+    post = function(url,data,callback) {
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+    
+        xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            return callback(JSON.parse(this.responseText))
+        }
+        });
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+        xhr.send(data);
+    }
+
+    get = function(url,callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+    
+        xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            return callback(JSON.parse(this.responseText))
+        }
+        });
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+        xhr.send();
+    }
+
+    imprimirMensajes = function(tipo, mensaje){
+        var misMensajes = document.getElementById("misMensajes");
+        this.mensajes.push({tipo:tipo,mensaje:mensaje});
+        misMensajes.innerHTML = "";
+
+        for (let a = 0; a < this.mensajes.length; a++) {
+            misMensajes.innerHTML += `<div class="alert alert-${this.mensajes[a].tipo}" role="alert">
+                                ${this.mensajes[a].mensaje}
+                            </div>`
+
+        }
+
+        setTimeout(()=>{
+            this.mensajes.splice(0,1);
+            misMensajes.innerHTML = "";
+            for (let a = 0; a < this.mensajes.length; a++) {
+                misMensajes.innerHTML += `<div class="alert alert-${this.mensajes[a].tipo}" role="alert">
+                                    ${this.mensajes[a].mensaje}
+                                </div>`
+    
+            }
+        },4000);
+
+    }
+
+}
+
+var miHost = "http://localhost:3000";
+var herramienta = new herramientas;
+
+var IniciarSesion = function(){
+
+    var correo = document.getElementById("correo").value;
+    var password = document.getElementById("password").value;
+
+    var post = {
+        host: miHost,
+        path:"/usuarios/Login",
+        payload:`correo=${correo}&password=${password}`
+    }
+
+    if(correo==undefined || correo == null || correo ==""){
+        herramienta.imprimirMensajes("danger","El correo electrónico es obligatorio para efectuar la operación.");
+        return false;
+    }
+
+    if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(correo) == false) {
+        herramienta.imprimirMensajes("danger","El correo electrónico no es uno válido.");
+        return false
+    }
+
+    if(password==undefined || password == null || password ==""){
+        herramienta.imprimirMensajes("danger","La contraseña es obligatoria para efectuar la operación.");
+        return false;
+    }
+
+    herramienta.post(post.host+post.path,post.payload,function(respuesta){
+        console.log(respuesta)
+        if(respuesta.state == false){
+            herramienta.imprimirMensajes("danger",respuesta.mensaje);
+        }
+        else{
+            herramienta.imprimirMensajes("success",respuesta.mensaje);
+        }
+    })
+}
+

@@ -1,0 +1,12 @@
+#registro{
+    background-color: rgb(58, 207, 226);
+    padding: 2rem;
+    margin-top: 1rem;
+    border-radius: 8px;
+}
+
+#misMensajes{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
